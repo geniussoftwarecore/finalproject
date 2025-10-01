@@ -4,12 +4,13 @@
  * انسخ هذا الملف إلى config.php وقم بتعديل الإعدادات حسب بيئتك
  */
 
-// إعدادات قاعدة البيانات - MySQL
-define('DB_HOST', 'localhost');
-define('DB_NAME', 'project_db');
-define('DB_USER', 'root');
-define('DB_PASS', '');
-define('DB_CHARSET', 'utf8mb4');
+// إعدادات قاعدة البيانات - PostgreSQL (Replit)
+// These values are automatically loaded from environment variables in Replit
+define('DB_HOST', getenv('PGHOST') ?: 'localhost');
+define('DB_NAME', getenv('PGDATABASE') ?: 'project_db');
+define('DB_USER', getenv('PGUSER') ?: 'root');
+define('DB_PASS', getenv('PGPASSWORD') ?: '');
+define('DB_PORT', getenv('PGPORT') ?: '5432');
 
 // إعدادات الأمان
 define('CSRF_TOKEN_NAME', 'csrf_token');
@@ -30,9 +31,9 @@ if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
 
-// إنشاء اتصال قاعدة البيانات باستخدام PDO (MySQL)
+// إنشاء اتصال قاعدة البيانات باستخدام PDO (PostgreSQL)
 try {
-    $dsn = "mysql:host=" . DB_HOST . ";dbname=" . DB_NAME . ";charset=" . DB_CHARSET;
+    $dsn = "pgsql:host=" . DB_HOST . ";port=" . DB_PORT . ";dbname=" . DB_NAME;
     $options = [
         PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
         PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,

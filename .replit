@@ -1,4 +1,4 @@
-modules = ["php-8.2"]
+modules = ["php-8.2", "postgresql-16"]
 [agent]
 expertMode = true
 
@@ -35,7 +35,7 @@ localPort = 5000
 externalPort = 80
 
 [[ports]]
-localPort = 36771
+localPort = 37961
 externalPort = 3000
 
 [deployment]
