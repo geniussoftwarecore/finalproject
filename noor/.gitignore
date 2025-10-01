@@ -1,0 +1,9 @@
+database.sqlite
+*.sqlite
+*.db
+.DS_Store
+Thumbs.db
+*.log
+.env
+.env.local
+setup_database.php
