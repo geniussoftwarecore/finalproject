@@ -291,5 +291,102 @@ class UserModel {
             'errors' => $errors
         ];
     }
+
+    /**
+     * الحصول على عدد تسجيلات الدخول في آخر 24 ساعة
+     */
+    public function getRecentLoginsCount() {
+        try {
+            $stmt = $this->pdo->prepare("
+                SELECT COUNT(DISTINCT user_id) as count 
+                FROM users 
+                WHERE last_login >= NOW() - INTERVAL '24 hours'
+            ");
+            $stmt->execute();
+            $result = $stmt->fetch();
+            return $result['count'];
+        } catch (PDOException $e) {
+            error_log("خطأ في الحصول على عدد تسجيلات الدخول الأخيرة: " . $e->getMessage());
+            return 0;
+        }
+    }
+    
+    /**
+     * إنشاء حساب مدير جديد
+     */
+    public function createAdmin($username, $email, $password) {
+        $passwordHash = password_hash($password, PASSWORD_DEFAULT);
+        
+        try {
+            $stmt = $this->pdo->prepare("
+                INSERT INTO users (username, email, password_hash, role, created_at) 
+                VALUES (?, ?, ?, 'admin', NOW())
+            ");
+            return $stmt->execute([$username, $email, $passwordHash]);
+        } catch (PDOException $e) {
+            error_log("خطأ في إنشاء حساب مدير: " . $e->getMessage());
+            return false;
+        }
+    }
+    
+    /**
+     * الحصول على المستخدمين مع الترقيم
+     */
+    public function getUsersWithPagination($page = 1, $perPage = 20, $search = '') {
+        $offset = ($page - 1) * $perPage;
+        
+        try {
+            if (!empty($search)) {
+                $stmt = $this->pdo->prepare("
+                    SELECT id, username, email, role, last_login, created_at 
+                    FROM users 
+                    WHERE username LIKE ? OR email LIKE ? 
+                    ORDER BY created_at DESC 
+                    LIMIT ? OFFSET ?
+                ");
+                $searchTerm = "%{$search}%";
+                $stmt->execute([$searchTerm, $searchTerm, $perPage, $offset]);
+            } else {
+                $stmt = $this->pdo->prepare("
+                    SELECT id, username, email, role, last_login, created_at 
+                    FROM users 
+                    ORDER BY created_at DESC 
+                    LIMIT ? OFFSET ?
+                ");
+                $stmt->execute([$perPage, $offset]);
+            }
+            
+            return $stmt->fetchAll();
+        } catch (PDOException $e) {
+            error_log("خطأ في الحصول على المستخدمين مع الترقيم: " . $e->getMessage());
+            return [];
+        }
+    }
+    
+    /**
+     * الحصول على عدد المستخدمين حسب البحث
+     */
+    public function getUsersCountBySearch($search = '') {
+        try {
+            if (!empty($search)) {
+                $stmt = $this->pdo->prepare("
+                    SELECT COUNT(*) as count 
+                    FROM users 
+                    WHERE username LIKE ? OR email LIKE ?
+                ");
+                $searchTerm = "%{$search}%";
+                $stmt->execute([$searchTerm, $searchTerm]);
+            } else {
+                $stmt = $this->pdo->prepare("SELECT COUNT(*) as count FROM users");
+                $stmt->execute();
+            }
+            
+            $result = $stmt->fetch();
+            return $result['count'];
+        } catch (PDOException $e) {
+            error_log("خطأ في الحصول على عدد المستخدمين: " . $e->getMessage());
+            return 0;
+        }
+    }
 }
 ?>

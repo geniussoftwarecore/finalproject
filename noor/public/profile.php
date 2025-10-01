@@ -37,6 +37,9 @@ if (!$user) {
                     <a href="dashboard.php" class="btn btn-secondary">
                         <i class="fas fa-arrow-right"></i> العودة للوحة التحكم
                     </a>
+                    <a href="activity.php" class="btn btn-secondary">
+                        <i class="fas fa-history"></i> سجل النشاط
+                    </a>
                     <a href="logout.php" class="btn btn-danger">
                         <i class="fas fa-sign-out-alt"></i> تسجيل الخروج
                     </a>

@@ -8,6 +8,7 @@ require_once __DIR__ . '/../app/config/config.php';
 require_once __DIR__ . '/../app/lib/auth.php';
 require_once __DIR__ . '/../app/lib/validation.php';
 require_once __DIR__ . '/../app/lib/captcha.php';
+require_once __DIR__ . '/../app/lib/activity.php';
 
 // التحقق من تسجيل الدخول - إذا كان المستخدم مسجل دخول، يتم توجيهه للوحة التحكم
 if (isset($_SESSION['user_id'])) {
@@ -23,6 +24,7 @@ if ($auth->checkRememberToken()) {
 }
 
 $errors = [];
+$activityLog = new ActivityLog($pdo);
 
 // معالجة طلب تسجيل الدخول
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -44,10 +46,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if ($captchaValidation['valid']) {
                 // محاولة تسجيل الدخول
                 if ($auth->login($username, $password, $remember)) {
+                    // تسجيل محاولة تسجيل دخول ناجحة
+                    $activityLog->recordLoginHistory($_SESSION['user_id'], $_SESSION['username'], 'success');
                     header('Location: dashboard.php');
                     exit();
                 } else {
                     $errors['general'] = 'اسم المستخدم أو كلمة المرور غير صحيحة';
+                    // تسجيل محاولة تسجيل دخول فاشلة
+                    $activityLog->recordLoginHistory(null, $username, 'failed');
                 }
             } else {
                 $errors['captcha'] = $captchaValidation['message'];
