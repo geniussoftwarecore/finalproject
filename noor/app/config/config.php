@@ -4,20 +4,17 @@
  * يحتوي على إعدادات قاعدة البيانات والثوابت العامة
  */
 
-// إعدادات قاعدة البيانات
-define('DB_HOST', 'localhost');
-define('DB_NAME', 'project_db');
-define('DB_USER', 'root');
-define('DB_PASS', '');
-define('DB_CHARSET', 'utf8mb4');
+// إعدادات قاعدة البيانات - SQLite
+define('DB_PATH', __DIR__ . '/../../database.sqlite');
 
 // إعدادات الأمان
 define('CSRF_TOKEN_NAME', 'csrf_token');
 define('SESSION_TIMEOUT', 3600); // ساعة واحدة
 
-// إعدادات reCAPTCHA
-define('RECAPTCHA_SITE_KEY', 'YOUR_RECAPTCHA_SITE_KEY');
-define('RECAPTCHA_SECRET_KEY', 'YOUR_RECAPTCHA_SECRET_KEY');
+// إعدادات reCAPTCHA - Using test keys for localhost
+// For production, replace with actual reCAPTCHA keys from https://www.google.com/recaptcha/
+define('RECAPTCHA_SITE_KEY', '6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI');
+define('RECAPTCHA_SECRET_KEY', '6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe');
 
 // إعدادات التطبيق
 define('APP_NAME', 'نظام إدارة المستخدمين');
@@ -28,10 +25,9 @@ if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
 
-// إنشاء اتصال قاعدة البيانات باستخدام PDO
+// إنشاء اتصال قاعدة البيانات باستخدام PDO (SQLite)
 try {
-    $dsn = "mysql:host=" . DB_HOST . ";dbname=" . DB_NAME . ";charset=" . DB_CHARSET;
-    $pdo = new PDO($dsn, DB_USER, DB_PASS);
+    $pdo = new PDO('sqlite:' . DB_PATH);
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     $pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
 } catch (PDOException $e) {
