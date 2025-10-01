@@ -4,13 +4,13 @@
  * انسخ هذا الملف إلى config.php وقم بتعديل الإعدادات حسب بيئتك
  */
 
-// إعدادات قاعدة البيانات - PostgreSQL (Replit)
-// These values are automatically loaded from environment variables in Replit
-define('DB_HOST', getenv('PGHOST') ?: 'localhost');
-define('DB_NAME', getenv('PGDATABASE') ?: 'project_db');
-define('DB_USER', getenv('PGUSER') ?: 'root');
-define('DB_PASS', getenv('PGPASSWORD') ?: '');
-define('DB_PORT', getenv('PGPORT') ?: '5432');
+// إعدادات قاعدة البيانات - MySQL (XAMPP)
+// للتثبيت المحلي على XAMPP، استخدم القيم التالية:
+define('DB_HOST', 'localhost');
+define('DB_NAME', 'project_db');
+define('DB_USER', 'root');
+define('DB_PASS', '');
+define('DB_PORT', '3306');
 
 // إعدادات الأمان
 define('CSRF_TOKEN_NAME', 'csrf_token');
@@ -31,9 +31,9 @@ if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
 
-// إنشاء اتصال قاعدة البيانات باستخدام PDO (PostgreSQL)
+// إنشاء اتصال قاعدة البيانات باستخدام PDO (MySQL)
 try {
-    $dsn = "pgsql:host=" . DB_HOST . ";port=" . DB_PORT . ";dbname=" . DB_NAME;
+    $dsn = "mysql:host=" . DB_HOST . ";port=" . DB_PORT . ";dbname=" . DB_NAME . ";charset=utf8mb4";
     $options = [
         PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
         PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,

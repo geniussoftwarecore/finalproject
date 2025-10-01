@@ -1,0 +1,11 @@
+# منع الوصول المباشر إلى مجلد app/
+# هذا المجلد يحتوي على ملفات حساسة (config, lib, models)
+
+Order deny,allow
+Deny from all
+
+# حماية إضافية للملفات الحساسة
+<FilesMatch "\.(php|ini|log|sql|env|config)$">
+    Order allow,deny
+    Deny from all
+</FilesMatch>

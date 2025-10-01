@@ -1,0 +1,20 @@
+# حماية لوحة الإدارة
+# منع الوصول المباشر من خارج التطبيق
+
+# تفعيل محرك إعادة الكتابة
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+</IfModule>
+
+# حماية من clickjacking
+<IfModule mod_headers.c>
+    Header set X-Frame-Options "SAMEORIGIN"
+    Header set X-Content-Type-Options "nosniff"
+    Header set X-XSS-Protection "1; mode=block"
+</IfModule>
+
+# تعطيل عرض المجلدات
+Options -Indexes
+
+# تفعيل ترميز UTF-8
+AddDefaultCharset UTF-8
