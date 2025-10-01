@@ -114,6 +114,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
                         <a href="contact.php" class="btn btn-secondary">
                             <i class="fas fa-headset"></i> الدعم
                         </a>
+                        <a href="about.php" class="btn btn-secondary">
+                            <i class="fas fa-info-circle"></i> حول النظام
+                        </a>
                         <a href="logout.php" class="btn btn-danger">
                             <i class="fas fa-sign-out-alt"></i> تسجيل الخروج
                         </a>

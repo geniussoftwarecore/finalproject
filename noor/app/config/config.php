@@ -4,12 +4,13 @@
  * يحتوي على إعدادات قاعدة البيانات والثوابت العامة
  */
 
-// إعدادات قاعدة البيانات - MySQL (XAMPP)
-define('DB_HOST', 'localhost');
-define('DB_NAME', 'project_db');
-define('DB_USER', 'root');
-define('DB_PASS', '');
-define('DB_PORT', '3306');
+// إعدادات قاعدة البيانات - PostgreSQL (Replit) / MySQL (XAMPP)
+// يتم تحديد نوع قاعدة البيانات تلقائياً بناءً على البيئة
+define('DB_HOST', getenv('PGHOST') ?: 'localhost');
+define('DB_NAME', getenv('PGDATABASE') ?: 'project_db');
+define('DB_USER', getenv('PGUSER') ?: 'root');
+define('DB_PASS', getenv('PGPASSWORD') ?: '');
+define('DB_PORT', getenv('PGPORT') ?: '3306');
 
 // إعدادات الأمان
 define('CSRF_TOKEN_NAME', 'csrf_token');
@@ -29,9 +30,20 @@ if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
 
-// إنشاء اتصال قاعدة البيانات باستخدام PDO (MySQL)
+// إنشاء اتصال قاعدة البيانات باستخدام PDO
+// يتم اختيار نوع قاعدة البيانات تلقائياً (PostgreSQL للـ Replit، MySQL للـ XAMPP)
 try {
-    $dsn = "mysql:host=" . DB_HOST . ";port=" . DB_PORT . ";dbname=" . DB_NAME . ";charset=utf8mb4";
+    // تحديد نوع قاعدة البيانات بناءً على وجود متغيرات البيئة
+    $isReplit = getenv('PGHOST') !== false;
+    
+    if ($isReplit) {
+        // PostgreSQL للـ Replit
+        $dsn = "pgsql:host=" . DB_HOST . ";port=" . DB_PORT . ";dbname=" . DB_NAME;
+    } else {
+        // MySQL للـ XAMPP
+        $dsn = "mysql:host=" . DB_HOST . ";port=" . DB_PORT . ";dbname=" . DB_NAME . ";charset=utf8mb4";
+    }
+    
     $options = [
         PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
         PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
