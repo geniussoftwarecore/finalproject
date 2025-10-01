@@ -1,0 +1,47 @@
+# حماية المجلدات الحساسة - منع الوصول المباشر
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    
+    # منع الوصول المباشر إلى مجلد app/
+    RewriteRule ^app/ - [F,L]
+    
+    # منع الوصول المباشر إلى مجلد admin/
+    RewriteRule ^admin/ - [F,L]
+    
+    # منع الوصول المباشر إلى مجلد api/
+    RewriteRule ^api/ - [F,L]
+    
+    # منع الوصول المباشر إلى مجلد auth/
+    RewriteRule ^auth/ - [F,L]
+    
+    # توجيه جميع الطلبات إلى public/ (ما عدا الملفات الموجودة)
+    RewriteCond %{REQUEST_URI} !^/public/
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^(.*)$ public/$1 [L]
+</IfModule>
+
+# حماية الملفات الحساسة
+<FilesMatch "\.(htaccess|htpasswd|ini|log|sh|sql|sqlite|md|env|config)$">
+    Order allow,deny
+    Deny from all
+</FilesMatch>
+
+# حماية ملفات النسخ الاحتياطي
+<FilesMatch "\.(bak|backup|old|tmp|swp|~)$">
+    Order allow,deny
+    Deny from all
+</FilesMatch>
+
+# تعطيل عرض محتوى المجلدات
+Options -Indexes
+
+# حماية من clickjacking و XSS
+<IfModule mod_headers.c>
+    Header set X-Frame-Options "SAMEORIGIN"
+    Header set X-Content-Type-Options "nosniff"
+    Header set X-XSS-Protection "1; mode=block"
+</IfModule>
+
+# تفعيل ترميز UTF-8
+AddDefaultCharset UTF-8

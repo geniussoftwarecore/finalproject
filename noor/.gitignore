@@ -1,9 +1,22 @@
-database.sqlite
-*.sqlite
-*.db
+# ملفات التكوين الحساسة
+config.php
+.env
+.env.local
+
+# ملفات XAMPP المؤقتة
+.htaccess.bak
+*.tmp
+error.log
+access.log
+
+# ملفات النظام
 .DS_Store
 Thumbs.db
 *.log
-.env
-.env.local
-setup_database.php
+
+# ملفات IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~

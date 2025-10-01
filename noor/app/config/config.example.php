@@ -1,7 +1,7 @@
 <?php
 /**
- * ملف التكوين الرئيسي للمشروع
- * يحتوي على إعدادات قاعدة البيانات والثوابت العامة
+ * ملف التكوين الرئيسي للمشروع - نسخة النموذج
+ * انسخ هذا الملف إلى config.php وقم بتعديل الإعدادات حسب بيئتك
  */
 
 // إعدادات قاعدة البيانات - MySQL
@@ -15,8 +15,9 @@ define('DB_CHARSET', 'utf8mb4');
 define('CSRF_TOKEN_NAME', 'csrf_token');
 define('SESSION_TIMEOUT', 3600); // ساعة واحدة
 
-// إعدادات reCAPTCHA - Using test keys for localhost
-// For production, replace with actual reCAPTCHA keys from https://www.google.com/recaptcha/
+// إعدادات reCAPTCHA
+// احصل على مفاتيح reCAPTCHA من: https://www.google.com/recaptcha/
+// المفاتيح التالية مخصصة للاختبار المحلي فقط
 define('RECAPTCHA_SITE_KEY', '6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI');
 define('RECAPTCHA_SECRET_KEY', '6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe');
 

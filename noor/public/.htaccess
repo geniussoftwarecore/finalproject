@@ -1,0 +1,39 @@
+# حماية ملفات التكوين
+<FilesMatch "^(config\.php|config\.example\.php)$">
+    Order allow,deny
+    Deny from all
+</FilesMatch>
+
+# حماية الملفات الحساسة
+<FilesMatch "\.(htaccess|htpasswd|ini|log|sh|sql|sqlite)$">
+    Order allow,deny
+    Deny from all
+</FilesMatch>
+
+# تفعيل محرك إعادة الكتابة
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    
+    # منع الوصول إلى المجلدات المخفية
+    RewriteRule "(^|/)\." - [F]
+    
+    # حماية من الوصول المباشر للملفات الحساسة
+    RewriteRule ^(app|includes|config)/ - [F,L]
+</IfModule>
+
+# تعطيل عرض المجلدات
+Options -Indexes
+
+# حماية من clickjacking
+<IfModule mod_headers.c>
+    Header set X-Frame-Options "SAMEORIGIN"
+    Header set X-Content-Type-Options "nosniff"
+    Header set X-XSS-Protection "1; mode=block"
+</IfModule>
+
+# تفعيل ترميز UTF-8
+AddDefaultCharset UTF-8
+
+# تعيين صفحات الخطأ المخصصة
+ErrorDocument 404 /errors/404.php
+ErrorDocument 403 /errors/403.php
